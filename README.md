@@ -30,6 +30,7 @@ Drop a `today.json` next to `index.html`. On page load it gets merged **once per
     "current": {"title": "Severance", "type": "watch", "link": "https://…", "why": "Fun"},
     "queue":   [{"title": "Song Exploder ep. 12", "type": "listen", "link": "", "why": "Short"}]
   },
+  "intention": {"text": "Do fewer things, and do them fully.", "journal": "What would make today feel well spent?", "ritual": "Open the window for two minutes."},
   "meal": {"text": "Sheet-pan gnocchi with tomatoes and spinach.", "link": "https://…"},
   "cleaning": [{"name": "Dust shelves", "freq": "weekly", "last": "2026-10-01"}]
 }
@@ -37,6 +38,7 @@ Drop a `today.json` next to `index.html`. On page load it gets merged **once per
 All keys are optional. `type` is one of read/watch/listen, and `freq` is one of daily/weekly/monthly.
 - **top3** replaces the top 3. If a title matches an item you already have, its checkmark is kept. Unfinished items that drop off go to *Later*.
 - **media** puts `current` first, then `queue`, ahead of your existing items. Duplicate titles are removed.
+- **intention** (optional) fills the Intention section at the top of the page: `text` is one sentence, `journal` is one prompt, `ritual` is one small action. Any line you leave out falls back to the built-in lists in `js/intentions.js` (40 of each, rotating by date).
 - **meal** (optional) shows in the Meal section as one or two lines of text, plus a link if there is one. If `meal` is missing from the latest today.json, the section says "No meal note today".
 - **cleaning** adds tasks it doesn't know yet. A task it already knows (matched by name) gets its frequency updated, and its last-done date is kept.
 

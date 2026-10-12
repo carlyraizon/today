@@ -1,6 +1,7 @@
 import {load,save,empty} from './store.js';
 import {activeSource} from './schedule-source.js';
 import {promptFor} from './prompts.js';
+import {intentionFor} from './intentions.js';
 let S=load();const $=id=>document.getElementById(id);
 const isoOf=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const todayISO=()=>isoOf(new Date());
@@ -44,6 +45,8 @@ async function render(){
  $('choreCount').textContent=S.chores.length?`${due.length} of ${S.chores.length} tasks`:'';
  $('chores').innerHTML=due.length?due.map(c=>`<li><span class="t">${esc(c.name)}</span><span class="ctl"><button data-delchore="${c.i}">Remove</button></span><span class="meta2">${cap(c.freq)} · ${lastTxt(c)}</span><button class="btn" data-done="${c.i}">Done</button></li>`).join(''):empty1(S.chores.length?'Nothing due today.':'No tasks yet.');
  $('meal').innerHTML=S.meal&&S.meal.text?`<p class="meal">${esc(S.meal.text)}</p>${safeUrl(S.meal.link)?`<a class="link" href="${esc(S.meal.link)}" target="_blank" rel="noopener">Recipe ↗</a>`:''}`:'<p class="empty" style="margin:0">No meal note today</p>';
+ const fb=intentionFor(now),it=S.intention||{};
+ $('intention').innerHTML=[['Intention',it.text||fb.text],['Journal',it.journal||fb.journal],['Ritual',it.ritual||fb.ritual]].map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
  const p=promptFor(now);$('prompt').textContent=p.text+'.';$('promptNum').textContent=`${p.n} / ${p.total}`;
  const tl=m=>safeUrl(m.link)?`<a href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.title)}</a>`:esc(m.title);
  const TY={read:'Reading',watch:'Watching',listen:'Listening'};
@@ -90,6 +93,7 @@ async function applyToday(){try{const r=await fetch('today.json',{cache:'no-stor
  if(j.media){const items=[j.media.current,...(j.media.queue||[])].filter(Boolean);const titles=new Set(items.map(m=>m.title));S.media=[...items,...S.media.filter(m=>!titles.has(m.title))]}
  if(Array.isArray(j.cleaning))for(const c of j.cleaning){const ex=S.chores.find(x=>x.name===c.name);if(ex)ex.freq=c.freq||ex.freq;else S.chores.push({name:c.name,freq:c.freq||'weekly',last:c.last||''})}
  S.meal=j.meal&&j.meal.text?{text:String(j.meal.text),link:String(j.meal.link||'')}:null;
+ S.intention=j.intention&&typeof j.intention==='object'?{text:String(j.intention.text||''),journal:String(j.intention.journal||''),ritual:String(j.intention.ritual||'')}:null;
  S.todayApplied=txt;S.sample=false;save(S)}catch(err){console.warn('today.json skipped',err)}}
 applyToday().then(render);
 setInterval(render,60000);
