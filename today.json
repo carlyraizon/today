@@ -1,0 +1,18 @@
+{
+  "top3": ["Laundry", "Self-care task", "Shop for clothing basics"],
+  "media": {
+    "current": {"title": "Thinking in Systems (Donella Meadows)", "type": "read", "link": "", "why": "Short, clear framing for design and life systems"},
+    "queue": []
+  },
+  "meal": {"text": "Lunch: skyr chicken salad with dill, lemon, and capers on seeded toast. Dessert: chocolate protein Ninja Creami pint."},
+  "cleaning": [
+    {"name": "Wipe kitchen counters and sink", "freq": "daily", "last": "2026-10-10"},
+    {"name": "5-minute tidy reset", "freq": "daily", "last": "2026-10-10"},
+    {"name": "Disinfect high-touch spots (handles, switches, remotes)", "freq": "weekly", "last": "2026-10-01"},
+    {"name": "Clean bathroom (toilet, sink, shower)", "freq": "weekly", "last": "2026-10-01"},
+    {"name": "Vacuum and mop floors", "freq": "weekly", "last": "2026-10-01"},
+    {"name": "Change bed sheets", "freq": "weekly", "last": "2026-10-01"},
+    {"name": "Clean fridge and toss old food", "freq": "monthly", "last": "2026-09-01"},
+    {"name": "Dust shelves and surfaces", "freq": "monthly", "last": "2026-09-01"}
+  ]
+}
