@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Today</title><link rel="stylesheet" href="style.css"></head>
+<body><div class="page">
+<header><div><p class="kicker" id="date"></p><h1 id="greeting"></h1></div><div class="meta" id="summary"></div></header>
+<p id="sampleNote" class="banner" hidden>Showing example data. <button class="linkbtn" id="clearBtn">Clear example data</button></p>
+<div class="row">
+<section><h2>Schedule <span id="evCount"></span></h2><ul id="events"></ul>
+<form id="eventForm" class="add"><input id="evTime" placeholder="09:00" required pattern="([01]?\d|2[0-3]):[0-5]\d" inputmode="numeric" aria-label="Time (HH:MM)"><input id="evTitle" placeholder="Add event" required><button>Add</button></form></section>
+<section><h2>Top 3 <span id="todoCount"></span></h2><ul id="todos"></ul>
+<form id="todoForm" class="add"><input id="todoText" placeholder="Add a to-do" required><button>Add</button></form>
+<details id="laterBox"><summary id="laterSum"></summary><ul id="later"></ul></details></section></div>
+<div class="row">
+<section><h2>Training</h2><p class="status" id="liftStatus"></p><p class="note" id="liftNote"></p>
+<div class="week" id="liftGrid"></div><a class="link" id="ladderLink" href="#" target="_blank" rel="noopener">Open Ladder ↗</a></section>
+<section><h2>Habits <span id="habitCount"></span></h2><ul id="habits"></ul>
+<form id="habitForm" class="add"><input id="habitName" placeholder="Add habit" required><input id="habitMins" type="number" min="0" placeholder="min" class="mins"><button>Add</button></form></section></div>
+<section class="full"><h2>Cleaning due <span id="choreCount"></span></h2><ul id="chores"></ul>
+<form id="choreForm" class="add"><input id="choreName" placeholder="Add task" required><select id="choreFreq"><option>daily</option><option>weekly</option><option>monthly</option></select><button>Add</button></form></section>
+<section class="full"><h2>Sketch prompt <span id="promptNum"></span></h2><p class="prompt" id="prompt"></p></section>
+<section class="full"><h2>Media</h2><div class="media"><div class="cur" id="mediaNow"></div><ul class="queue" id="media"></ul></div>
+<form id="mediaForm" class="add"><input id="mTitle" placeholder="Add title" required><select id="mType"><option>read</option><option>watch</option><option>listen</option></select><input id="mLink" placeholder="Link"><input id="mWhy" placeholder="Why"><button>Add</button></form></section>
+<footer><button class="linkbtn" id="exportBtn">Export</button><label class="linkbtn">Import<input type="file" id="importFile" accept="application/json" hidden></label><button class="linkbtn" id="settingsBtn">Settings</button><button class="linkbtn" id="resetBtn">Clear all data</button></footer>
+</div>
+<dialog id="settings"><form method="dialog" id="settingsForm"><h3>Settings</h3>
+<label>Name<input id="setName" placeholder="Your name"></label>
+<label>Ladder link<input id="setLadder" type="url" placeholder="https://"></label>
+<label>Training note<input id="setNote" placeholder="e.g. Follow today's session in Ladder."></label>
+<div class="actions"><button value="cancel" class="ghost">Cancel</button><button value="save" id="saveSettings">Save</button></div></form></dialog>
+<script type="module" src="js/app.js"></script></body></html>

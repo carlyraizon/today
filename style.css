@@ -1,0 +1,47 @@
+:root{--bg:#FBFBFA;--ink:#1F1F1E;--2:#5F5E5B;--3:#9B9A97;--line:#E9E9E7;--accent:#C2410C}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.page{max-width:880px;margin:0 auto;padding:56px 32px 80px}
+header{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.kicker{font-size:12px;color:var(--3);font-weight:500;margin:0 0 4px}h1{font-size:32px;font-weight:650;letter-spacing:-.02em;margin:0;line-height:1.15}
+.meta{font-size:13px;color:var(--2);text-align:right}.meta b{color:var(--ink);font-weight:600}
+.banner{margin:0;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px;color:var(--2)}
+.row{display:grid;grid-template-columns:1fr 1fr;column-gap:48px;border-bottom:1px solid var(--line)}.row section{border:0}
+section{padding:22px 0;border-bottom:1px solid var(--line);min-width:0}
+h2{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--3);margin:0 0 12px;display:flex;justify-content:space-between}
+h2 span{text-transform:none;letter-spacing:0;font-weight:500}
+ul{list-style:none;margin:0;padding:0}li{display:flex;align-items:baseline;gap:12px;padding:6px 0;position:relative}
+.time{font-variant-numeric:tabular-nums;color:var(--2);width:44px;flex:none;font-size:13px}
+.now .time{color:var(--accent)}.now .t{font-weight:550}.past .t,.past .time{color:var(--3)}
+.t{flex:1;min-width:0}.sub{color:var(--3);font-size:13px;font-variant-numeric:tabular-nums}.tag{color:var(--accent);font-size:13px}
+input[type=checkbox]{appearance:none;width:15px;height:15px;border:1.5px solid #C7C6C3;border-radius:4px;flex:none;margin:0;transform:translateY(2px);cursor:pointer}
+input[type=checkbox]:checked{background:var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' stroke='white' stroke-width='2' fill='none'/%3E%3C/svg%3E");border-color:var(--ink)}
+.checked .t{color:var(--3)}
+.ctl{display:flex;gap:2px;opacity:0;transition:opacity .12s;position:absolute;right:0;top:50%;transform:translateY(-50%);background:var(--bg);padding-left:8px}li:hover .ctl,li:focus-within .ctl{opacity:1}.ctl:not(:hover):not(:focus-within){pointer-events:none}li:hover .ctl,li:focus-within .ctl{pointer-events:auto}
+.ctl button{border:0;background:none;color:var(--3);font:inherit;font-size:12px;padding:0 4px;cursor:pointer}.ctl button:hover{color:var(--ink)}
+.now .sub{margin-left:auto}li:focus{outline:0}
+.add{display:flex;gap:8px;margin-top:6px}.add input,.add select{flex:1;min-width:0;border:0;border-bottom:1px solid transparent;background:none;font:inherit;font-size:13px;color:var(--ink);padding:4px 0}
+.add input::placeholder{color:var(--3)}.add input:focus,.add select:focus{outline:0;border-bottom-color:var(--line)}
+.add #evTime{flex:0 0 44px}.add #evTitle,.add #todoText,.add #habitName,.add #choreName,.add #mTitle{flex:0 1 220px}.add #mLink,.add #mWhy{flex:0 1 140px}.add .mins{flex:0 0 48px}.add select{flex:0 0 auto;color:var(--2)}
+.add button,.btn{font:inherit;font-size:12px;border:1px solid var(--line);background:#fff;border-radius:5px;padding:2px 9px;color:var(--2);cursor:pointer}
+.add button{visibility:hidden}.add:focus-within button{visibility:visible}
+#todoForm,#habitForm{padding-left:27px}#eventForm{padding-left:0}
+details{margin-top:8px}summary{color:var(--3);font-size:13px;cursor:pointer;padding-left:27px;list-style:none}summary::-webkit-details-marker{display:none}
+.status{font-size:20px;font-weight:600;letter-spacing:-.01em;margin:0 0 4px}.note{color:var(--2);margin:0 0 14px;font-size:13px}
+.week{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.week button{font:inherit;font-size:12px;padding:7px 0;color:var(--3);border:0;border-right:1px solid var(--line);background:#fff;cursor:pointer}.week button:last-child{border:0}
+.week .on{color:var(--ink);font-weight:600}.week .today{box-shadow:inset 0 -2px 0 var(--accent)}
+a{color:var(--ink);text-decoration:underline;text-decoration-color:#C7C6C3;text-underline-offset:3px}.link{font-size:13px;display:inline-block;margin-top:12px}
+.streak{font-size:12px;color:var(--3);font-variant-numeric:tabular-nums}.streak b{color:var(--ink);font-weight:600}
+.meta2{color:var(--3);font-size:13px;margin-left:auto;text-align:right}
+.prompt{font-size:22px;font-weight:550;letter-spacing:-.015em;margin:0}
+.media{display:grid;grid-template-columns:1fr 1fr;gap:48px}.cur .type{font-size:12px;color:var(--accent);font-weight:600}.cur p{margin:2px 0}.cur .title{font-size:16px;font-weight:600}.cur .by{color:var(--2);font-weight:400}
+.queue li{font-size:13px}.queue .type{color:var(--3);width:44px;flex:none}
+.empty{color:var(--3);font-size:13px}
+footer{padding-top:16px;display:flex;gap:16px}.linkbtn{font:inherit;font-size:12px;color:var(--3);background:none;border:0;padding:0;cursor:pointer}.linkbtn:hover{color:var(--ink)}
+.banner .linkbtn{font-size:13px;color:var(--ink);text-decoration:underline;text-decoration-color:#C7C6C3;text-underline-offset:3px}
+dialog{border:1px solid var(--line);border-radius:10px;padding:24px;width:min(400px,92vw);box-shadow:0 12px 40px rgba(0,0,0,.08)}dialog::backdrop{background:rgba(251,251,250,.7)}
+dialog h3{margin:0 0 16px;font-size:16px;font-weight:600}dialog label{display:block;font-size:12px;color:var(--2);margin-bottom:12px}
+dialog input{display:block;width:100%;margin-top:4px;font:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--line);border-radius:6px}dialog input:focus{outline:0;border-color:var(--3)}
+.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}.actions button{font:inherit;font-size:13px;border-radius:6px;padding:6px 14px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}.actions .ghost{background:#fff;color:var(--2);border-color:var(--line)}
+@media(max-width:640px){.page{padding:28px 20px 56px}.row,.media{grid-template-columns:1fr;gap:0}.row section+section{border-top:1px solid var(--line)}h1{font-size:26px}header{display:block}.meta{text-align:left;margin-top:8px}.queue{margin-top:16px}
+.full li:has(.meta2){display:grid;grid-template-columns:1fr auto;row-gap:0}.full li .meta2{grid-row:2;text-align:left;margin:0;font-size:12px}.full li .btn{grid-row:1/3;grid-column:2;align-self:center}.add{flex-wrap:wrap}}
