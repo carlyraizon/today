@@ -14,6 +14,9 @@ const ordinal=n=>n+(n%10===1&&n!==11?'st':n%10===2&&n!==12?'nd':n%10===3&&n!==13
 const cap=s=>s[0].toUpperCase()+s.slice(1);
 const empty1=t=>`<li class="empty">${t}</li>`;
 const streak=h=>{let n=0,d=new Date();if(!h.log.includes(isoOf(d)))d.setDate(d.getDate()-1);while(h.log.includes(isoOf(d))){n++;d.setDate(d.getDate()-1)}return n};
+const best=log=>{const a=[...new Set(log)].sort();let b=0,r=0,p=null;for(const x of a){r=p&&Math.round((new Date(x)-new Date(p))/864e5)===1?r+1:1;b=Math.max(b,r);p=x}return b};
+const dots=log=>{let o='';for(let k=13;k>=0;k--){const d=new Date();d.setDate(d.getDate()-k);const i=isoOf(d);o+=`<i class="${log.includes(i)?'f':''}${k?'':' td'}" title="${i}"></i>`}return `<span class="dots" aria-hidden="true">${o}</span>`};
+const trail=log=>{const k=streak({log}),b=best(log);return `<span class="streak" title="Current streak ${k} · best ${b}">${dots(log)}<span class="sn">${k?`<b>${k}</b>d`:'—'}</span></span>`};
 const mins=t=>{const[h,m]=t.split(':').map(Number);return h*60+m};
 async function render(){
  const now=new Date(),dow=(now.getDay()+6)%7,h=now.getHours(),nm=mins(`${h}:${now.getMinutes()}`);
@@ -34,11 +37,13 @@ async function render(){
  const lift=S.lift[dow];
  $('liftStatus').textContent=lift?'Lift day':'Rest day';
  $('liftNote').textContent=!S.lift.some(Boolean)?'Tap the days you lift.':lift?S.liftNote:'Recover. A walk counts.';
+ const wd=(S.liftLog||[]).includes(todayISO());
+ $('liftDone').innerHTML=`<li class="${wd?'checked':''}"><input type="checkbox" data-workout ${wd?'checked':''} aria-label="Workout done"><span class="t">Workout done</span>${trail(S.liftLog||[])}</li>`;
  $('liftGrid').innerHTML=DAYS.map((d,i)=>`<button class="${S.lift[i]?'on':''} ${i===dow?'today':''}" data-lift="${i}" aria-pressed="${S.lift[i]}" aria-label="${DAYN[i]}">${d}</button>`).join('');
  $('ladderLink').href=safeUrl(S.ladderUrl)||'https://www.joinladder.com/';
  const hd=S.habits.filter(x=>x.log.includes(todayISO())).length;
  $('habitCount').textContent=S.habits.length?`${hd} of ${S.habits.length}`:'';
- $('habits').innerHTML=S.habits.length?S.habits.map((x,i)=>{const on=x.log.includes(todayISO()),k=streak(x);return `<li class="${on?'checked':''}"><input type="checkbox" data-habit="${i}" ${on?'checked':''} aria-label="Done today"><span class="t">${esc(x.name)}${x.mins?` <span class="sub">${x.mins} min</span>`:''}</span><span class="ctl"><button data-delhabit="${i}" aria-label="Remove">Remove</button></span><span class="streak">${k?`<b>${k}</b> day${k>1?'s':''}`:'—'}</span></li>`}).join(''):empty1('No habits yet.');
+ $('habits').innerHTML=S.habits.length?S.habits.map((x,i)=>{const on=x.log.includes(todayISO()),k=streak(x);return `<li class="${on?'checked':''}"><input type="checkbox" data-habit="${i}" ${on?'checked':''} aria-label="Done today"><span class="t">${esc(x.name)}${x.mins?` <span class="sub">${x.mins} min</span>`:''}</span><span class="ctl"><button data-delhabit="${i}" aria-label="Remove">Remove</button></span>${trail(x.log)}</li>`}).join(''):empty1('No habits yet.');
  const cd=S.choreDone&&S.choreDone.date===todayISO()?S.choreDone.names:[];
  const DN=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
  const on=(c,d)=>c.freq==='weekly'?c.day===DN[(d.getDay()+6)%7]:c.freq==='monthly'?(c.week?c.day===DN[(d.getDay()+6)%7]&&Math.ceil(d.getDate()/7)===+c.week:+c.date===d.getDate()):false;
@@ -59,7 +64,7 @@ async function render(){
  const [c0,...q]=S.media;
  $('mediaNow').innerHTML=c0?`<span class="type">${TY[c0.type]||'Now'}</span><p class="title">${tl(c0)}${c0.by?` <span class="by">${esc(c0.by)}</span>`:''}</p>${c0.why?`<p class="note">${esc(c0.why)}</p>`:''}<button class="btn" data-mnext>Finished</button>`:'<p class="empty">Nothing picked.</p>';
  $('media').innerHTML=q.length?q.map((m,j)=>`<li><span class="type">${cap(m.type)}</span><span class="t">${tl(m)}</span><span class="ctl"><button data-mpick="${j+1}">Start</button><button data-mdel="${j+1}">Remove</button></span></li>`).join(''):empty1('Queue is empty.');
- const parts=[`<b>${ev.length}</b> event${ev.length===1?'':'s'}`,`<b>${S.todos.length-doneN}</b> open`,`<b>${lift?'Lift':'Rest'} day</b>`];
+ const parts=[`<b>${ev.length}</b> event${ev.length===1?'':'s'}`,`<b>${S.todos.length-doneN}</b> open`,`<b>${lift?'Lift':'Rest'} day</b>${wd?' ✓':''}`];
  $('summary').innerHTML=parts.join(' · ');
 }
 document.addEventListener('click',e=>{const d=e.target.dataset;if(!d)return;
@@ -74,6 +79,7 @@ document.addEventListener('click',e=>{const d=e.target.dataset;if(!d)return;
  else if(d.chore!=null){const n=S.chores[+d.chore].name,t=todayISO();const l=S.choreDone&&S.choreDone.date===t?S.choreDone.names:[];S.choreDone={date:t,names:e.target.checked?[...new Set([...l,n])]:l.filter(x=>x!==n)}}
  else if(d.delchore!=null)S.chores.splice(+d.delchore,1);
  else if(d.habit!=null){const x=S.habits[+d.habit],t=todayISO();x.log=e.target.checked?[...new Set([...x.log,t])]:x.log.filter(v=>v!==t)}
+ else if(d.workout!=null){const t=todayISO(),l=Array.isArray(S.liftLog)?S.liftLog:[];S.liftLog=e.target.checked?[...new Set([...l,t])]:l.filter(v=>v!==t)}
  else if(d.delhabit!=null)S.habits.splice(+d.delhabit,1);
  else if(d.mnext!=null)S.media.shift();
  else if(d.mpick!=null)S.media.unshift(...S.media.splice(+d.mpick,1));
