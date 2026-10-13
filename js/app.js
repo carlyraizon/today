@@ -52,7 +52,8 @@ async function render(){
  const cli=c=>{const x=cd.includes(c.name);return `<li class="${x?'checked':''}"><input type="checkbox" data-chore="${c.i}" ${x?'checked':''} aria-label="Done"><span class="t">${esc(c.name)}</span><span class="ctl"><button data-delchore="${c.i}">Remove</button></span><span class="meta2">${c.freq==='weekly'?'Weekly · '+c.day:c.freq==='monthly'?'Monthly · '+(c.week?ordinal(+c.week)+' '+c.day:ordinal(+c.date)):''}</span></li>`};
  $('choresDaily').innerHTML=daily.length?daily.map(cli).join(''):empty1('No daily tasks.');
  $('choresToday').innerHTML=tod.length?tod.map(cli).join(''):empty1('Nothing extra today');
- const sched=[...daily,...tod];$('choreCount').textContent=sched.length?`${sched.filter(c=>cd.includes(c.name)).length} of ${sched.length} done`:'';
+ const sched=[...daily,...tod];const nd=sched.filter(c=>cd.includes(c.name)).length,t0=todayISO();if(!Array.isArray(S.cleanLog))S.cleanLog=[];const had=S.cleanLog.includes(t0),all=sched.length>0&&nd===sched.length;if(all!==had){S.cleanLog=all?[...S.cleanLog,t0]:S.cleanLog.filter(v=>v!==t0);save(S)}
+ $('choreCount').innerHTML=(sched.length?`<span>${nd} of ${sched.length} done</span>`:'')+trail(S.cleanLog);
  let nx='';for(let k=1;k<=62&&!nx;k++){const d=new Date(now);d.setDate(d.getDate()+k);const m=items.filter(c=>on(c,d));if(m.length)nx=`Next: ${m.map(c=>c.name).join(', ')} · ${k===1?'tomorrow':d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}`}
  $('choreNext').textContent=nx;
  $('meal').innerHTML=S.meal&&S.meal.text?`<p class="meal">${esc(S.meal.text)}</p>${safeUrl(S.meal.link)?`<a class="link" href="${esc(S.meal.link)}" target="_blank" rel="noopener">Recipe ↗</a>`:''}`:'<p class="empty" style="margin:0">No meal note today</p>';

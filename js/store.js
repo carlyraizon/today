@@ -1,7 +1,7 @@
 const KEY='today-app-v1';
 const MIGRATION=3;
 const defHabits=()=>[['Keyboard practice',10],['Sketching',10],['Knitting',0],['Space reset',5]].map(([name,mins])=>({name,mins,log:[]}));
-export const empty=()=>({migration:MIGRATION,name:'',ladderUrl:'',liftNote:'Follow today’s session in Ladder.',events:[],todos:[],later:[],lift:[false,false,false,false,false,false,false],habits:defHabits(),media:[],chores:[],meal:null,intention:null,liftLog:[]});
+export const empty=()=>({migration:MIGRATION,name:'',ladderUrl:'',liftNote:'Follow today’s session in Ladder.',events:[],todos:[],later:[],lift:[false,false,false,false,false,false,false],habits:defHabits(),media:[],chores:[],meal:null,intention:null,liftLog:[],cleanLog:[]});
 
 // Titles seeded as example data by earlier versions of the app.
 const OLD={
@@ -30,5 +30,5 @@ function migrate(s){
 }
 export function load(){let raw=null;try{raw=JSON.parse(localStorage.getItem(KEY))}catch{}
  if(!raw)return empty();
- const {s}=migrate({...empty(),...raw,migration:raw.migration||0});if(!Array.isArray(s.liftLog))s.liftLog=[];s.liftLog=s.liftLog.filter(d=>typeof d==='string');save(s);return s}
+ const {s}=migrate({...empty(),...raw,migration:raw.migration||0});if(!Array.isArray(s.liftLog))s.liftLog=[];s.liftLog=s.liftLog.filter(d=>typeof d==='string');if(!Array.isArray(s.cleanLog))s.cleanLog=[];s.cleanLog=[...new Set(s.cleanLog.filter(d=>typeof d==='string'))];save(s);return s}
 export function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
