@@ -18,42 +18,50 @@
   },
   "cleaning": [
     {
-      "name": "Wipe kitchen counters and sink",
+      "name": "Empty dish rack and wipe counters (while coffee brews)",
       "freq": "daily"
     },
     {
-      "name": "5-minute tidy reset",
+      "name": "Squeegee shower and wipe sink (after shower)",
       "freq": "daily"
     },
     {
-      "name": "Clean bathroom (toilet, sink, shower)",
+      "name": "10-min reset: dishes, cushions, quick vacuum (at log-off)",
+      "freq": "daily"
+    },
+    {
+      "name": "Wipe stove if you cooked, run dishwasher (before bed)",
+      "freq": "daily"
+    },
+    {
+      "name": "Bathroom (toilet, shower, mirror, floor) + change sheets and wash towels",
       "freq": "weekly",
       "day": "Mon"
     },
     {
-      "name": "Disinfect high-touch spots (handles, switches, remotes)",
+      "name": "Dust + high-touch spots (handles, switches, remotes)",
       "freq": "weekly",
       "day": "Tue"
     },
     {
-      "name": "Vacuum and mop floors",
+      "name": "Kitchen: microwave, appliance fronts, fridge purge",
+      "freq": "weekly",
+      "day": "Wed"
+    },
+    {
+      "name": "Floors: vacuum and mop",
       "freq": "weekly",
       "day": "Thu"
     },
     {
-      "name": "Change bed sheets",
+      "name": "Desk cart reset",
       "freq": "weekly",
-      "day": "Sat"
+      "day": "Fri"
     },
     {
-      "name": "Clean fridge and toss old food",
+      "name": "Monthly deep clean (~45 min): baseboards, vents, light fixtures, inside fridge, wash shower liner and bath mats, vacuum under furniture, washer clean cycle",
       "freq": "monthly",
-      "date": 9
-    },
-    {
-      "name": "Dust shelves and surfaces",
-      "freq": "monthly",
-      "date": 23
+      "date": 3
     }
   ],
   "intention": {
