@@ -36,7 +36,8 @@ Drop a `today.json` next to `index.html`. On page load it gets merged **once per
   "cleaning": [
     {"name": "Wipe kitchen counters and sink", "freq": "daily"},
     {"name": "Clean bathroom", "freq": "weekly", "day": "Mon"},
-    {"name": "Clean fridge", "freq": "monthly", "date": 9}
+    {"name": "Clean fridge", "freq": "monthly", "date": 9},
+    {"name": "Deep clean", "freq": "monthly", "week": 1, "day": "Sat"}
   ]
 }
 ```
@@ -46,7 +47,7 @@ All keys are optional. `type` is one of read/watch/listen, and `freq` is one of 
 - **intention** (optional) fills the Intention section at the top of the page: `text` is one sentence, `journal` is one prompt, `ritual` is one small action. Any line you leave out falls back to the built-in lists in `js/intentions.js` (40 of each, rotating by date).
 - **sketch** (optional) replaces the built-in sketch prompt for the day, and the `NN / 60` counter is hidden. If it's missing, the built-in prompt that rotates by date is shown.
 - **meal** (optional) shows in the Meal section as one or two lines of text, plus a link if there is one. If `meal` is missing from the latest today.json, the section says "No meal note today".
-- **cleaning** is a fixed calendar schedule, and it **replaces** the whole cleaning list. `freq` is `daily`, `weekly` (also needs `day`: Mon–Sun) or `monthly` (also needs `date`: 1–28). The section shows two groups: **Every day** (the daily tasks) and **Today** (the weekly task for today's weekday, plus any monthly task for today's date). If nothing is scheduled for today it says "Nothing extra today". Under that, a one-line "Next:" preview shows the next weekly or monthly task. Checkmarks reset every day.
+- **cleaning** is a fixed calendar schedule, and it **replaces** the whole cleaning list. `freq` is `daily`, `weekly` (also needs `day`: Mon–Sun) or `monthly` (either `date`: 1–28, or an nth-weekday rule `week`: 1–4 plus `day`: Mon–Sun, e.g. `"week":1,"day":"Sat"` = first Saturday). The section shows two groups: **Every day** (the daily tasks) and **Today** (the weekly task for today's weekday, plus any monthly task matching today's date or nth weekday). If nothing is scheduled for today it says "Nothing extra today". Under that, a one-line "Next:" preview shows the next weekly or monthly task. Checkmarks reset every day.
 
 ## Code layout
 - `js/store.js`: state, seed data, load/save

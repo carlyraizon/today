@@ -61,7 +61,8 @@
     {
       "name": "Monthly deep clean (~45 min): baseboards, vents, light fixtures, inside fridge, wash shower liner and bath mats, vacuum under furniture, washer clean cycle",
       "freq": "monthly",
-      "date": 3
+      "week": 1,
+      "day": "Sat"
     }
   ],
   "intention": {
