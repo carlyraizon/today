@@ -10,8 +10,7 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const safeUrl=u=>/^https?:\/\//i.test(u||'')?u:'';
 const commit=()=>{save(S);render()};
 const daysSince=d=>d?Math.round((new Date(todayISO())-new Date(d))/864e5):Infinity;
-const isDue=c=>daysSince(c.last)>={daily:1,weekly:7,monthly:30}[c.freq];
-const lastTxt=c=>{const n=daysSince(c.last);return n===Infinity?'never done':n===0?'done today':n===1?'done yesterday':`${n} days ago`};
+const ordinal=n=>n+(n%10===1&&n!==11?'st':n%10===2&&n!==12?'nd':n%10===3&&n!==13?'rd':'th');
 const cap=s=>s[0].toUpperCase()+s.slice(1);
 const empty1=t=>`<li class="empty">${t}</li>`;
 const streak=h=>{let n=0,d=new Date();if(!h.log.includes(isoOf(d)))d.setDate(d.getDate()-1);while(h.log.includes(isoOf(d))){n++;d.setDate(d.getDate()-1)}return n};
@@ -40,9 +39,17 @@ async function render(){
  const hd=S.habits.filter(x=>x.log.includes(todayISO())).length;
  $('habitCount').textContent=S.habits.length?`${hd} of ${S.habits.length}`:'';
  $('habits').innerHTML=S.habits.length?S.habits.map((x,i)=>{const on=x.log.includes(todayISO()),k=streak(x);return `<li class="${on?'checked':''}"><input type="checkbox" data-habit="${i}" ${on?'checked':''} aria-label="Done today"><span class="t">${esc(x.name)}${x.mins?` <span class="sub">${x.mins} min</span>`:''}</span><span class="ctl"><button data-delhabit="${i}" aria-label="Remove">Remove</button></span><span class="streak">${k?`<b>${k}</b> day${k>1?'s':''}`:'—'}</span></li>`}).join(''):empty1('No habits yet.');
- const due=S.chores.map((c,i)=>({...c,i})).filter(isDue);
- $('choreCount').textContent=S.chores.length?`${due.length} of ${S.chores.length} tasks`:'';
- $('chores').innerHTML=due.length?due.map(c=>`<li><span class="t">${esc(c.name)}</span><span class="ctl"><button data-delchore="${c.i}">Remove</button></span><span class="meta2">${cap(c.freq)} · ${lastTxt(c)}</span><button class="btn" data-done="${c.i}">Done</button></li>`).join(''):empty1(S.chores.length?'Nothing due today.':'No tasks yet.');
+ const cd=S.choreDone&&S.choreDone.date===todayISO()?S.choreDone.names:[];
+ const DN=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+ const on=(c,d)=>c.freq==='weekly'?c.day===DN[(d.getDay()+6)%7]:c.freq==='monthly'?+c.date===d.getDate():false;
+ const items=S.chores.map((c,i)=>({...c,i}));
+ const daily=items.filter(c=>c.freq==='daily'),tod=items.filter(c=>on(c,now));
+ const cli=c=>{const x=cd.includes(c.name);return `<li class="${x?'checked':''}"><input type="checkbox" data-chore="${c.i}" ${x?'checked':''} aria-label="Done"><span class="t">${esc(c.name)}</span><span class="ctl"><button data-delchore="${c.i}">Remove</button></span><span class="meta2">${c.freq==='weekly'?'Weekly · '+c.day:c.freq==='monthly'?'Monthly · '+ordinal(+c.date):''}</span></li>`};
+ $('choresDaily').innerHTML=daily.length?daily.map(cli).join(''):empty1('No daily tasks.');
+ $('choresToday').innerHTML=tod.length?tod.map(cli).join(''):empty1('Nothing extra today');
+ const sched=[...daily,...tod];$('choreCount').textContent=sched.length?`${sched.filter(c=>cd.includes(c.name)).length} of ${sched.length} done`:'';
+ let nx='';for(let k=1;k<=62&&!nx;k++){const d=new Date(now);d.setDate(d.getDate()+k);const m=items.filter(c=>on(c,d));if(m.length)nx=`Next: ${m.map(c=>c.name).join(', ')} · ${k===1?'tomorrow':d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}`}
+ $('choreNext').textContent=nx;
  $('meal').innerHTML=S.meal&&S.meal.text?`<p class="meal">${esc(S.meal.text)}</p>${safeUrl(S.meal.link)?`<a class="link" href="${esc(S.meal.link)}" target="_blank" rel="noopener">Recipe ↗</a>`:''}`:'<p class="empty" style="margin:0">No meal note today</p>';
  const fb=intentionFor(now),it=S.intention||{};
  $('intention').innerHTML=[['Intention',it.text||fb.text],['Journal',it.journal||fb.journal],['Ritual',it.ritual||fb.ritual]].map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
@@ -64,7 +71,7 @@ document.addEventListener('click',e=>{const d=e.target.dataset;if(!d)return;
  else if(d.deltodo){const[l,i]=d.deltodo.split(':');S[l].splice(+i,1)}
  else if(d.chk){const[l,i]=d.chk.split(':');S[l][+i].done=e.target.checked}
  else if(d.lift!=null)S.lift[+d.lift]=!S.lift[+d.lift];
- else if(d.done!=null)S.chores[+d.done].last=todayISO();
+ else if(d.chore!=null){const n=S.chores[+d.chore].name,t=todayISO();const l=S.choreDone&&S.choreDone.date===t?S.choreDone.names:[];S.choreDone={date:t,names:e.target.checked?[...new Set([...l,n])]:l.filter(x=>x!==n)}}
  else if(d.delchore!=null)S.chores.splice(+d.delchore,1);
  else if(d.habit!=null){const x=S.habits[+d.habit],t=todayISO();x.log=e.target.checked?[...new Set([...x.log,t])]:x.log.filter(v=>v!==t)}
  else if(d.delhabit!=null)S.habits.splice(+d.delhabit,1);
@@ -76,7 +83,8 @@ const onAdd=(id,fn)=>$(id).onsubmit=e=>{e.preventDefault();fn();e.target.reset()
 onAdd('eventForm',()=>S.events.push({time:$('evTime').value.padStart(5,'0'),title:$('evTitle').value.trim()}));
 onAdd('todoForm',()=>{const t={text:$('todoText').value.trim(),done:false};(S.todos.length<3?S.todos:S.later).push(t)});
 onAdd('habitForm',()=>S.habits.push({name:$('habitName').value.trim(),mins:+$('habitMins').value||0,log:[]}));
-onAdd('choreForm',()=>S.chores.push({name:$('choreName').value.trim(),freq:$('choreFreq').value,last:''}));
+onAdd('choreForm',()=>{const f=$('choreFreq').value,c={name:$('choreName').value.trim(),freq:f};if(f==='weekly')c.day=$('choreDay').value;if(f==='monthly')c.date=Math.min(28,Math.max(1,+$('choreDate').value||1));S.chores.push(c)});
+const syncChoreForm=()=>{const f=$('choreFreq').value;$('choreDay').hidden=f!=='weekly';$('choreDate').hidden=f!=='monthly'};$('choreFreq').onchange=syncChoreForm;syncChoreForm();
 onAdd('mediaForm',()=>S.media.push({title:$('mTitle').value.trim(),type:$('mType').value,link:$('mLink').value.trim(),why:$('mWhy').value.trim()}));
 const wipe=()=>{const keep={name:S.name,ladderUrl:S.ladderUrl,liftNote:S.liftNote};S={...empty(),...keep};save(S);applyToday().then(render)};
 $('resetBtn').onclick=()=>{if(confirm('Clear all data on this device? Export first if you want a backup.'))wipe()};
@@ -89,7 +97,7 @@ async function applyToday(){try{const r=await fetch('today.json',{cache:'no-stor
  if(Array.isArray(j.top3)){const old=new Map([...S.todos,...S.later].map(t=>[t.text,t.done]));const drop=S.todos.filter(t=>!j.top3.includes(t.text)&&!t.done);
   S.todos=j.top3.slice(0,3).map(t=>({text:t,done:!!old.get(t)}));S.later=[...drop,...S.later.filter(l=>!j.top3.includes(l.text)&&!drop.some(d=>d.text===l.text))]}
  if(j.media){const items=[j.media.current,...(j.media.queue||[])].filter(Boolean);const titles=new Set(items.map(m=>m.title));S.media=[...items,...S.media.filter(m=>!titles.has(m.title))]}
- if(Array.isArray(j.cleaning))for(const c of j.cleaning){const ex=S.chores.find(x=>x.name===c.name);if(ex)ex.freq=c.freq||ex.freq;else S.chores.push({name:c.name,freq:c.freq||'weekly',last:c.last||''})}
+ if(Array.isArray(j.cleaning))S.chores=j.cleaning.filter(c=>c&&c.name&&['daily','weekly','monthly'].includes(c.freq)).map(c=>{const o={name:String(c.name),freq:c.freq};if(c.freq==='weekly')o.day=String(c.day||'Mon').slice(0,3);if(c.freq==='monthly')o.date=Math.min(28,Math.max(1,+c.date||1));return o});
  S.meal=j.meal&&j.meal.text?{text:String(j.meal.text),link:String(j.meal.link||'')}:null;
  S.intention=j.intention&&typeof j.intention==='object'?{text:String(j.intention.text||''),journal:String(j.intention.journal||''),ritual:String(j.intention.ritual||'')}:null;
  S.sketch=j.sketch&&j.sketch.text?{text:String(j.sketch.text)}:null;

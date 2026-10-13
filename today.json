@@ -19,43 +19,41 @@
   "cleaning": [
     {
       "name": "Wipe kitchen counters and sink",
-      "freq": "daily",
-      "last": "2026-10-10"
+      "freq": "daily"
     },
     {
       "name": "5-minute tidy reset",
-      "freq": "daily",
-      "last": "2026-10-10"
-    },
-    {
-      "name": "Disinfect high-touch spots (handles, switches, remotes)",
-      "freq": "weekly",
-      "last": "2026-10-01"
+      "freq": "daily"
     },
     {
       "name": "Clean bathroom (toilet, sink, shower)",
       "freq": "weekly",
-      "last": "2026-10-01"
+      "day": "Mon"
+    },
+    {
+      "name": "Disinfect high-touch spots (handles, switches, remotes)",
+      "freq": "weekly",
+      "day": "Tue"
     },
     {
       "name": "Vacuum and mop floors",
       "freq": "weekly",
-      "last": "2026-10-01"
+      "day": "Thu"
     },
     {
       "name": "Change bed sheets",
       "freq": "weekly",
-      "last": "2026-10-01"
+      "day": "Sat"
     },
     {
       "name": "Clean fridge and toss old food",
       "freq": "monthly",
-      "last": "2026-09-01"
+      "date": 9
     },
     {
       "name": "Dust shelves and surfaces",
       "freq": "monthly",
-      "last": "2026-09-01"
+      "date": 23
     }
   ],
   "intention": {
