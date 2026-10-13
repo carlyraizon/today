@@ -53,3 +53,4 @@ dialog input{display:block;width:100%;margin-top:4px;font:inherit;font-size:14px
 .streak{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}.dots{display:flex;gap:2px}.dots i{width:7px;height:7px;border-radius:2px;background:var(--line)}.dots i.f{background:var(--accent);opacity:.85}.dots i.td{outline:1px solid var(--2);outline-offset:1px}.sn{min-width:26px;text-align:right}
 @media(max-width:600px){.dots i{width:6px;height:6px}}
 #choreCount{display:flex;align-items:center;gap:12px}#choreCount .streak{margin-left:0}
+#sketchDone{margin:8px 0 0}

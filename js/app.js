@@ -59,6 +59,8 @@ async function render(){
  $('meal').innerHTML=S.meal&&S.meal.text?`<p class="meal">${esc(S.meal.text)}</p>${safeUrl(S.meal.link)?`<a class="link" href="${esc(S.meal.link)}" target="_blank" rel="noopener">Recipe ↗</a>`:''}`:'<p class="empty" style="margin:0">No meal note today</p>';
  const fb=intentionFor(now),it=S.intention||{};
  $('intention').innerHTML=[['Intention',it.text||fb.text],['Journal',it.journal||fb.journal],['Ritual',it.ritual||fb.ritual]].map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
+ const sd=(S.sketchLog||[]).includes(todayISO());
+ $('sketchDone').innerHTML=`<li class="${sd?'checked':''}"><input type="checkbox" data-sketch ${sd?'checked':''} aria-label="Sketched today"><span class="t">Sketched today</span>${trail(S.sketchLog||[])}</li>`;
  const p=promptFor(now);if(S.sketch&&S.sketch.text){$('prompt').textContent=S.sketch.text;$('promptNum').textContent=''}else{$('prompt').textContent=p.text+'.';$('promptNum').textContent=`${p.n} / ${p.total}`}
  const tl=m=>safeUrl(m.link)?`<a href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.title)}</a>`:esc(m.title);
  const TY={read:'Reading',watch:'Watching',listen:'Listening'};
@@ -80,6 +82,7 @@ document.addEventListener('click',e=>{const d=e.target.dataset;if(!d)return;
  else if(d.chore!=null){const n=S.chores[+d.chore].name,t=todayISO();const l=S.choreDone&&S.choreDone.date===t?S.choreDone.names:[];S.choreDone={date:t,names:e.target.checked?[...new Set([...l,n])]:l.filter(x=>x!==n)}}
  else if(d.delchore!=null)S.chores.splice(+d.delchore,1);
  else if(d.habit!=null){const x=S.habits[+d.habit],t=todayISO();x.log=e.target.checked?[...new Set([...x.log,t])]:x.log.filter(v=>v!==t)}
+ else if(d.sketch!=null){const t=todayISO(),l=Array.isArray(S.sketchLog)?S.sketchLog:[];S.sketchLog=e.target.checked?[...new Set([...l,t])]:l.filter(v=>v!==t)}
  else if(d.workout!=null){const t=todayISO(),l=Array.isArray(S.liftLog)?S.liftLog:[];S.liftLog=e.target.checked?[...new Set([...l,t])]:l.filter(v=>v!==t)}
  else if(d.delhabit!=null)S.habits.splice(+d.delhabit,1);
  else if(d.mnext!=null)S.media.shift();
