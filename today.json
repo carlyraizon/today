@@ -14,7 +14,7 @@
     "queue": []
   },
   "meal": {
-    "text": "Lunch: skyr chicken salad with dill, lemon, and capers on seeded toast. Dessert: chocolate protein Ninja Creami pint."
+    "text": "Breakfast: Greek yogurt with berries and a spoon of nut butter. Dinner: turkey and black bean chili topped with skyr and scallions."
   },
   "cleaning": [
     {
@@ -59,8 +59,8 @@
     }
   ],
   "intention": {
-    "text": "Take care of the basics, and let that count as a good day.",
-    "journal": "What would make your space and your week feel a little lighter?",
-    "ritual": "Open the window for two minutes before you start the laundry."
+    "text": "Move at an easy pace and finish what you start.",
+    "journal": "What's one small thing that would make today feel like yours?",
+    "ritual": "Light a candle when you start work, and blow it out when you log off."
   }
 }
