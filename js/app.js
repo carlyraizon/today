@@ -46,7 +46,7 @@ async function render(){
  $('meal').innerHTML=S.meal&&S.meal.text?`<p class="meal">${esc(S.meal.text)}</p>${safeUrl(S.meal.link)?`<a class="link" href="${esc(S.meal.link)}" target="_blank" rel="noopener">Recipe ↗</a>`:''}`:'<p class="empty" style="margin:0">No meal note today</p>';
  const fb=intentionFor(now),it=S.intention||{};
  $('intention').innerHTML=[['Intention',it.text||fb.text],['Journal',it.journal||fb.journal],['Ritual',it.ritual||fb.ritual]].map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
- const p=promptFor(now);$('prompt').textContent=p.text+'.';$('promptNum').textContent=`${p.n} / ${p.total}`;
+ const p=promptFor(now);if(S.sketch&&S.sketch.text){$('prompt').textContent=S.sketch.text;$('promptNum').textContent=''}else{$('prompt').textContent=p.text+'.';$('promptNum').textContent=`${p.n} / ${p.total}`}
  const tl=m=>safeUrl(m.link)?`<a href="${esc(m.link)}" target="_blank" rel="noopener">${esc(m.title)}</a>`:esc(m.title);
  const TY={read:'Reading',watch:'Watching',listen:'Listening'};
  const [c0,...q]=S.media;
@@ -92,6 +92,7 @@ async function applyToday(){try{const r=await fetch('today.json',{cache:'no-stor
  if(Array.isArray(j.cleaning))for(const c of j.cleaning){const ex=S.chores.find(x=>x.name===c.name);if(ex)ex.freq=c.freq||ex.freq;else S.chores.push({name:c.name,freq:c.freq||'weekly',last:c.last||''})}
  S.meal=j.meal&&j.meal.text?{text:String(j.meal.text),link:String(j.meal.link||'')}:null;
  S.intention=j.intention&&typeof j.intention==='object'?{text:String(j.intention.text||''),journal:String(j.intention.journal||''),ritual:String(j.intention.ritual||'')}:null;
+ S.sketch=j.sketch&&j.sketch.text?{text:String(j.sketch.text)}:null;
  S.todayApplied=txt;save(S)}catch(err){console.warn('today.json skipped',err)}}
 applyToday().then(render);
 setInterval(render,60000);
