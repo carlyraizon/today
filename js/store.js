@@ -1,15 +1,31 @@
 const KEY='today-app-v1';
-const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-const ago=n=>{const d=new Date();d.setDate(d.getDate()-n);return iso(d)};
-const streakLog=n=>Array.from({length:n},(_,i)=>ago(i+1));
-const defHabits=ex=>[['Keyboard practice',10,ex?12:0],['Sketching',10,ex?5:0],['Knitting',0,ex?2:0],['Space reset',5,0]].map(([name,mins,n])=>({name,mins,log:streakLog(n)}));
-export const sample=()=>({sample:true,name:'',ladderUrl:'',liftNote:'Follow today’s session in Ladder.',
-events:[{time:'09:30',title:'Design critique'},{time:'11:00',title:'Focus block'},{time:'13:00',title:'Lunch'},{time:'15:30',title:'Team 1:1'}],
-todos:[{text:'Send research synthesis',done:true},{text:'Finalize flow mocks',done:false},{text:'Book dentist appointment',done:false}],
-later:[{text:'Organize component library',done:false},{text:'Plan weekend trip',done:false}],
-lift:[true,false,true,false,true,false,false],habits:defHabits(true),
-media:[{title:'Thinking in Systems',by:'Donella Meadows',type:'read',link:'',why:'A chapter tonight.'},{title:'Abstract: The Art of Design',type:'watch',link:'',why:''},{title:'Design Details podcast',type:'listen',link:'',why:''}],
-chores:[{name:'Wipe kitchen counters',freq:'daily',last:ago(1)},{name:'Vacuum living room',freq:'weekly',last:ago(8)},{name:'Change sheets',freq:'weekly',last:ago(2)},{name:'Clean fridge',freq:'monthly',last:ago(10)}]});
-export const empty=()=>({sample:false,name:'',ladderUrl:'',liftNote:'Follow today’s session in Ladder.',events:[],todos:[],later:[],lift:[false,false,false,false,false,false,false],habits:defHabits(false),media:[],chores:[]});
-export function load(){try{const s=JSON.parse(localStorage.getItem(KEY));return s?{...empty(),...s}:sample()}catch{return sample()}}
+const MIGRATION=2;
+const defHabits=()=>[['Keyboard practice',10],['Sketching',10],['Knitting',0],['Space reset',5]].map(([name,mins])=>({name,mins,log:[]}));
+export const empty=()=>({migration:MIGRATION,name:'',ladderUrl:'',liftNote:'Follow today’s session in Ladder.',events:[],todos:[],later:[],lift:[false,false,false,false,false,false,false],habits:defHabits(),media:[],chores:[],meal:null,intention:null});
+
+// Titles seeded as example data by earlier versions of the app.
+const OLD={
+ events:['Design critique','Focus block','Lunch','Team 1:1'],
+ todos:['Send research synthesis','Finalize flow mocks','Book dentist appointment','Organize component library','Plan weekend trip'],
+ media:['Thinking in Systems','Abstract: The Art of Design','Design Details podcast'],
+ chores:['Wipe kitchen counters','Vacuum living room','Change sheets','Clean fridge']};
+const OLD_LIFT='true,false,true,false,true,false,false';
+const APP_START='2026-10-12'; // nothing real can predate the app; earlier habit dates were seeded streaks
+const isEx=(t,list)=>/\(example\)\s*$/.test(t||'')||list.includes(t);
+function migrate(s){
+ if((s.migration||0)>=MIGRATION)return {s,ran:false};
+ const wasSample=!!s.sample||(s.events||[]).some(e=>isEx(e.title,OLD.events))||(s.todos||[]).some(t=>isEx(t.text,OLD.todos));
+ s.events=(s.events||[]).filter(e=>!isEx(e.title,OLD.events));
+ s.todos=(s.todos||[]).filter(t=>!isEx(t.text,OLD.todos));
+ s.later=(s.later||[]).filter(t=>!isEx(t.text,OLD.todos));
+ s.media=(s.media||[]).filter(m=>!isEx(m.title,OLD.media));
+ s.chores=(s.chores||[]).filter(c=>!isEx(c.name,OLD.chores));
+ s.habits=(s.habits||defHabits()).map(h=>({...h,log:[...new Set((h.log||[]).filter(d=>d>=APP_START))]}));
+ if(wasSample&&String(s.lift)===OLD_LIFT)s.lift=empty().lift;
+ delete s.sample;s.migration=MIGRATION;s.todayApplied=null; // force today.json re-merge
+ return {s,ran:true};
+}
+export function load(){let raw=null;try{raw=JSON.parse(localStorage.getItem(KEY))}catch{}
+ if(!raw)return empty();
+ const {s}=migrate({...empty(),...raw,migration:raw.migration||0});save(s);return s}
 export function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
