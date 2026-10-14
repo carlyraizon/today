@@ -14,7 +14,7 @@
     "queue": []
   },
   "meal": {
-    "text": "Lunch: skyr chicken salad with dill, lemon, and capers on seeded toast. Dessert: chocolate protein Ninja Creami pint."
+    "text": "Lunch: turkey and white-bean skillet with spinach and lemon. Side: cottage cheese with berries."
   },
   "cleaning": [
     {
@@ -66,11 +66,11 @@
     }
   ],
   "intention": {
-    "text": "Move at an easy pace and finish what you start.",
-    "journal": "What's one small thing that would make today feel like yours?",
-    "ritual": "Light a candle when you start work, and blow it out when you log off."
+    "text": "Give one thing your full attention before picking up the next.",
+    "journal": "What felt like enough for today, even if the list wasn't finished?",
+    "ritual": "Crack a window and clear just the desk surface before you start."
   },
   "sketch": {
-    "text": "Sketch your coffee mug from life, simple contour lines only (10 min)."
+    "text": "Sketch a houseplant leaf from life, three quick angles (10 min)."
   }
 }
