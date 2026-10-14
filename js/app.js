@@ -34,6 +34,10 @@ async function render(){
  $('todos').innerHTML=S.todos.length?S.todos.map((t,i)=>todoLi(t,i,'todos')).join(''):empty1('Choose up to three.');
  $('later').innerHTML=S.later.map((t,i)=>todoLi(t,i,'later')).join('');
  $('laterSum').textContent=`Later · ${S.later.length} item${S.later.length===1?'':'s'}`;
+ if(!Array.isArray(S.work))S.work=[];
+ const workDone=S.work.filter(t=>t.done).length;
+ $('workCount').textContent=S.work.length?`${workDone} of ${S.work.length} done`:'';
+ $('work').innerHTML=S.work.length?S.work.map((t,i)=>`<li class="${t.done?'checked':''}"><input type="checkbox" data-workchk="${i}" ${t.done?'checked':''} aria-label="Done"><span class="t">${esc(t.text)}</span><span class="ctl"><button data-delwork="${i}" aria-label="Remove">Remove</button></span></li>`).join(''):empty1('No work tasks today.');
  const lift=S.lift[dow];
  $('liftStatus').textContent=lift?'Lift day':'Rest day';
  $('liftNote').textContent=!S.lift.some(Boolean)?'Tap the days you lift.':lift?S.liftNote:'Recover. A walk counts.';
@@ -78,6 +82,8 @@ document.addEventListener('click',e=>{const d=e.target.dataset;if(!d)return;
  else if(d.totop!=null){if(S.todos.length>=3){alert('Top 3 is full. Move one to Later first.');return}S.todos.push(...S.later.splice(+d.totop,1))}
  else if(d.deltodo){const[l,i]=d.deltodo.split(':');S[l].splice(+i,1)}
  else if(d.chk){const[l,i]=d.chk.split(':');S[l][+i].done=e.target.checked}
+ else if(d.workchk!=null){S.work[+d.workchk].done=e.target.checked}
+ else if(d.delwork!=null)S.work.splice(+d.delwork,1);
  else if(d.lift!=null)S.lift[+d.lift]=!S.lift[+d.lift];
  else if(d.chore!=null){const n=S.chores[+d.chore].name,t=todayISO();const l=S.choreDone&&S.choreDone.date===t?S.choreDone.names:[];S.choreDone={date:t,names:e.target.checked?[...new Set([...l,n])]:l.filter(x=>x!==n)}}
  else if(d.delchore!=null)S.chores.splice(+d.delchore,1);
@@ -92,6 +98,7 @@ document.addEventListener('click',e=>{const d=e.target.dataset;if(!d)return;
 const onAdd=(id,fn)=>$(id).onsubmit=e=>{e.preventDefault();fn();e.target.reset();commit()};
 onAdd('eventForm',()=>S.events.push({time:$('evTime').value.padStart(5,'0'),title:$('evTitle').value.trim()}));
 onAdd('todoForm',()=>{const t={text:$('todoText').value.trim(),done:false};(S.todos.length<3?S.todos:S.later).push(t)});
+onAdd('workForm',()=>S.work.push({text:$('workText').value.trim(),done:false}));
 onAdd('habitForm',()=>S.habits.push({name:$('habitName').value.trim(),mins:+$('habitMins').value||0,log:[]}));
 onAdd('choreForm',()=>{const f=$('choreFreq').value,c={name:$('choreName').value.trim(),freq:f};if(f==='weekly')c.day=$('choreDay').value;if(f==='monthly'){const w=+$('choreWeek').value;if(w){c.week=w;c.day=$('choreDay').value}else c.date=Math.min(28,Math.max(1,+$('choreDate').value||1))}S.chores.push(c)});
 const syncChoreForm=()=>{const f=$('choreFreq').value;const w=f==='monthly'&&+$('choreWeek').value;$('choreDay').hidden=!(f==='weekly'||w);$('choreWeek').hidden=f!=='monthly';$('choreDate').hidden=f!=='monthly'||!!w};$('choreFreq').onchange=$('choreWeek').onchange=syncChoreForm;syncChoreForm();
@@ -106,11 +113,25 @@ $('importFile').onchange=async e=>{try{const d=JSON.parse(await e.target.files[0
 async function applyToday(){try{const r=await fetch('today.json',{cache:'no-store'});if(!r.ok)return;const txt=await r.text();if(S.todayApplied===txt)return;const j=JSON.parse(txt);
  if(Array.isArray(j.top3)){const old=new Map([...S.todos,...S.later].map(t=>[t.text,t.done]));const drop=S.todos.filter(t=>!j.top3.includes(t.text)&&!t.done);
   S.todos=j.top3.slice(0,3).map(t=>({text:t,done:!!old.get(t)}));S.later=[...drop,...S.later.filter(l=>!j.top3.includes(l.text)&&!drop.some(d=>d.text===l.text))]}
+ if(Array.isArray(j.work)){const old=new Map((S.work||[]).map(t=>[t.text,t.done]));S.work=j.work.filter(Boolean).map(t=>({text:String(t),done:!!old.get(String(t))}))}
  if(j.media){const items=[j.media.current,...(j.media.queue||[])].filter(Boolean);const titles=new Set(items.map(m=>m.title));S.media=[...items,...S.media.filter(m=>!titles.has(m.title))]}
  if(Array.isArray(j.cleaning))S.chores=j.cleaning.filter(c=>c&&c.name&&['daily','weekly','monthly'].includes(c.freq)).map(c=>{const o={name:String(c.name),freq:c.freq};if(c.freq==='weekly')o.day=String(c.day||'Mon').slice(0,3);if(c.freq==='monthly'){const w=Math.round(+c.week);if(w>=1&&w<=4){o.week=w;o.day=String(c.day||'Mon').slice(0,3)}else o.date=Math.min(28,Math.max(1,+c.date||1))}return o});
  S.meal=j.meal&&j.meal.text?{text:String(j.meal.text),link:String(j.meal.link||'')}:null;
  S.intention=j.intention&&typeof j.intention==='object'?{text:String(j.intention.text||''),journal:String(j.intention.journal||''),ritual:String(j.intention.ritual||'')}:null;
  S.sketch=j.sketch&&j.sketch.text?{text:String(j.sketch.text)}:null;
+ // Remote done list: ticks from Charlie / other bots merge into local streaks and checkmarks.
+ if(Array.isArray(j.done)){
+  const habitMatch=(want)=>{const w=want.toLowerCase();const aliases={walk:'walk',piano:'keyboard',keyboard:'keyboard',sketch:'sketch',sketching:'sketch'};const key=aliases[w]||w;return (S.habits||[]).findIndex(h=>{const n=h.name.toLowerCase();if(n===w)return true;if(key==='keyboard'&&(n.includes('keyboard')||n.includes('piano')))return true;if(key==='sketch'&&n.includes('sketch'))return true;if(key==='walk'&&n.includes('walk'))return true;return n.includes(w)||w.includes(n)})};
+  for(const d of j.done){
+   if(!d||typeof d.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(d.date))continue;
+   const kind=d.kind;
+   if(kind==='workout'){if(!Array.isArray(S.liftLog))S.liftLog=[];S.liftLog=[...new Set([...S.liftLog,d.date])]}
+   else if(kind==='sketch'){if(!Array.isArray(S.sketchLog))S.sketchLog=[];S.sketchLog=[...new Set([...S.sketchLog,d.date])]}
+   else if(kind==='habit'&&d.name){let i=habitMatch(String(d.name));if(i<0){S.habits.push({name:String(d.name),mins:0,log:[]});i=S.habits.length-1}S.habits[i].log=[...new Set([...(S.habits[i].log||[]),d.date])]}
+   else if(kind==='todo'&&d.text){const mark=list=>{const t=list.find(x=>x.text===d.text);if(t)t.done=true};mark(S.todos);mark(S.later);mark(S.work||[])}
+   else if(kind==='work'&&d.text){const t=(S.work||[]).find(x=>x.text===d.text);if(t)t.done=true}
+  }
+ }
  S.todayApplied=txt;save(S)}catch(err){console.warn('today.json skipped',err)}}
 applyToday().then(render);
 setInterval(render,60000);

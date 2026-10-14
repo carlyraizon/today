@@ -24,7 +24,7 @@ input[type=checkbox]:checked{background:var(--ink) url("data:image/svg+xml,%3Csv
 .add #evTime{flex:0 0 44px}.add #evTitle,.add #todoText,.add #habitName,.add #choreName,.add #mTitle{flex:0 1 220px}.add #mLink,.add #mWhy{flex:0 1 140px}.add .mins{flex:0 0 48px}.add select{flex:0 0 auto;color:var(--2)}
 .add button,.btn{font:inherit;font-size:12px;border:1px solid var(--line);background:#fff;border-radius:5px;padding:2px 9px;color:var(--2);cursor:pointer}
 .add button{visibility:hidden}.add:focus-within button{visibility:visible}
-#todoForm,#habitForm{padding-left:27px}#eventForm{padding-left:0}
+#todoForm,#habitForm,#workForm{padding-left:27px}#eventForm{padding-left:0}
 details{margin-top:8px}summary{color:var(--3);font-size:13px;cursor:pointer;padding-left:27px;list-style:none}summary::-webkit-details-marker{display:none}
 .status{font-size:20px;font-weight:600;letter-spacing:-.01em;margin:0 0 4px}.note{color:var(--2);margin:0 0 14px;font-size:13px}
 .week{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(--line);border-radius:6px;overflow:hidden}

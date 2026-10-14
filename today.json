@@ -1,8 +1,38 @@
 {
   "top3": [
     "Shop for clothing basics",
-    "Send gifts to two friends",
-    "Mail a product return"
+    "Mail a product return",
+    "Update my personal website"
+  ],
+  "work": [
+    "Answer Prah on BSIC",
+    "Square away Snapshot Monitoring, Multiple Loan Check, and Data Discrepancies",
+    "Post a Prototype Loom for Accuracy Studio"
+  ],
+  "done": [
+    {
+      "date": "2026-10-14",
+      "kind": "workout"
+    },
+    {
+      "date": "2026-10-14",
+      "kind": "sketch"
+    },
+    {
+      "date": "2026-10-14",
+      "kind": "habit",
+      "name": "Walk"
+    },
+    {
+      "date": "2026-10-14",
+      "kind": "habit",
+      "name": "Keyboard practice"
+    },
+    {
+      "date": "2026-10-14",
+      "kind": "todo",
+      "text": "Send gifts to two friends"
+    }
   ],
   "media": {
     "current": {
@@ -59,7 +89,7 @@
       "day": "Fri"
     },
     {
-      "name": "Monthly deep clean (~45 min): baseboards, vents, light fixtures, inside fridge, wash shower liner and bath mats, vacuum under furniture, washer clean cycle",
+      "name": "Monthly deep clean (~45 min): baseboards, vents, light fixtures, inside fridge, wash shower liner and bath mats, vacuum under furniture, dishwasher and washer clean cycles",
       "freq": "monthly",
       "week": 1,
       "day": "Sat"
