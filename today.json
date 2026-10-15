@@ -44,7 +44,7 @@
     "queue": []
   },
   "meal": {
-    "text": "Lunch: turkey and white-bean skillet with spinach and lemon. Side: cottage cheese with berries."
+    "text": "Lunch: Greek yogurt chicken salad wraps with cucumber and herbs. Snack: two hard-boiled eggs and an apple."
   },
   "cleaning": [
     {
@@ -96,11 +96,11 @@
     }
   ],
   "intention": {
-    "text": "Give one thing your full attention before picking up the next.",
-    "journal": "What felt like enough for today, even if the list wasn't finished?",
-    "ritual": "Crack a window and clear just the desk surface before you start."
+    "text": "Let today be built from small, finished things.",
+    "journal": "Which part of yesterday do you want more of today?",
+    "ritual": "Light a candle at your desk while you set up, and blow it out when you log off."
   },
   "sketch": {
-    "text": "Loose outline of your coffee corner: mug plus two nearby objects, warm and imperfect (10 min)."
+    "text": "Your knitting hat in progress with its yarn ball, in slow continuous lines, Wendy MacNaughton style (10 min)."
   }
 }
