@@ -32,6 +32,25 @@
       "date": "2026-10-14",
       "kind": "todo",
       "text": "Send gifts to two friends"
+    },
+    {
+      "date": "2026-10-15",
+      "kind": "workout"
+    },
+    {
+      "date": "2026-10-15",
+      "kind": "habit",
+      "name": "Yoga"
+    },
+    {
+      "date": "2026-10-15",
+      "kind": "habit",
+      "name": "Knitting"
+    },
+    {
+      "date": "2026-10-15",
+      "kind": "todo",
+      "text": "Update my personal website"
     }
   ],
   "media": {
