@@ -51,6 +51,11 @@
       "date": "2026-10-15",
       "kind": "todo",
       "text": "Update my personal website"
+    },
+    {
+      "date": "2026-10-16",
+      "kind": "habit",
+      "name": "Keyboard practice"
     }
   ],
   "media": {
