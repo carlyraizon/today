@@ -2,7 +2,7 @@
   "top3": [
     "Shop for clothing basics",
     "Mail a product return",
-    "Update my personal website"
+    "Book flights for an upcoming visit"
   ],
   "work": [
     "Answer Prah on BSIC",
@@ -62,9 +62,6 @@
     },
     "queue": []
   },
-  "meal": {
-    "text": "Lunch: Greek yogurt chicken salad wraps with cucumber and herbs. Snack: two hard-boiled eggs and an apple."
-  },
   "cleaning": [
     {
       "name": "Empty dish rack and wipe counters (while coffee brews)",
@@ -115,11 +112,11 @@
     }
   ],
   "intention": {
-    "text": "Let today be built from small, finished things.",
-    "journal": "Which part of yesterday do you want more of today?",
-    "ritual": "Light a candle at your desk while you set up, and blow it out when you log off."
+    "text": "Move through today with an easy pace and an open afternoon.",
+    "journal": "What is one small thing you're looking forward to today, and why?",
+    "ritual": "Open a window for two minutes while your coffee brews and let the room reset with you."
   },
   "sketch": {
-    "text": "Your knitting hat in progress with its yarn ball, in slow continuous lines, Wendy MacNaughton style (10 min)."
+    "text": "Draw your morning mug three quick times (about 3 min each), then add one tiny playful detail to the last one, Mattias Adolfsson style."
   }
 }
