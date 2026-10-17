@@ -60,6 +60,21 @@
     {
       "date": "2026-10-16",
       "kind": "sketch"
+    },
+    {
+      "date": "2026-10-17",
+      "kind": "habit",
+      "name": "Walk"
+    },
+    {
+      "date": "2026-10-17",
+      "kind": "habit",
+      "name": "Keyboard practice"
+    },
+    {
+      "date": "2026-10-17",
+      "kind": "habit",
+      "name": "Knitting"
     }
   ],
   "media": {
