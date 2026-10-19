@@ -5,9 +5,8 @@
     "Book flights for an upcoming visit"
   ],
   "work": [
-    "Answer Prah on BSIC",
-    "Square away Snapshot Monitoring, Multiple Loan Check, and Data Discrepancies",
-    "Post a Prototype Loom for Accuracy Studio"
+    "Prep for Accuracy Studio meeting",
+    "Send Joe the design system components"
   ],
   "done": [
     {
@@ -84,6 +83,15 @@
     {
       "date": "2026-10-17",
       "kind": "sketch"
+    },
+    {
+      "date": "2026-10-19",
+      "kind": "workout"
+    },
+    {
+      "date": "2026-10-19",
+      "kind": "habit",
+      "name": "Walk"
     }
   ],
   "media": {
