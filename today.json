@@ -92,6 +92,20 @@
       "date": "2026-10-19",
       "kind": "habit",
       "name": "Walk"
+    },
+    {
+      "date": "2026-10-20",
+      "kind": "workout"
+    },
+    {
+      "date": "2026-10-20",
+      "kind": "habit",
+      "name": "Walk"
+    },
+    {
+      "date": "2026-10-20",
+      "kind": "habit",
+      "name": "Morning pages"
     }
   ],
   "media": {
