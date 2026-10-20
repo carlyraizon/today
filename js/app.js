@@ -122,6 +122,13 @@ async function applyToday(){try{const r=await fetch('today.json',{cache:'no-stor
  // Remote done list: ticks from Charlie / other bots merge into local streaks and checkmarks.
  if(Array.isArray(j.done)){
   const habitMatch=(want)=>{const w=want.toLowerCase();const aliases={walk:'walk',piano:'keyboard',keyboard:'keyboard',sketch:'sketch',sketching:'sketch'};const key=aliases[w]||w;return (S.habits||[]).findIndex(h=>{const n=h.name.toLowerCase();if(n===w)return true;if(key==='keyboard'&&(n.includes('keyboard')||n.includes('piano')))return true;if(key==='sketch'&&n.includes('sketch'))return true;if(key==='walk'&&n.includes('walk'))return true;return n.includes(w)||w.includes(n)})};
+  // chore: {date,kind:'chore',name} ticks one cleaning task (fuzzy name match) for today; name 'all' (or no name) ticks every task scheduled that day. Past dates count toward the cleaning streak only when 'all'.
+  const DN=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const schedFor=ds=>{const dt=new Date(ds+'T12:00:00'),wd=DN[(dt.getDay()+6)%7];return (S.chores||[]).filter(c=>c.freq==='daily'||(c.freq==='weekly'&&c.day===wd)||(c.freq==='monthly'&&(c.week?c.day===wd&&Math.ceil(dt.getDate()/7)===+c.week:+c.date===dt.getDate())))};
+  const choreTick=d=>{const all=!d.name||String(d.name).toLowerCase()==='all',t=todayISO();
+   if(d.date!==t){if(all){if(!Array.isArray(S.cleanLog))S.cleanLog=[];S.cleanLog=[...new Set([...S.cleanLog,d.date])]}return}
+   const w=String(d.name||'').toLowerCase();const names=all?schedFor(t).map(c=>c.name):(S.chores||[]).filter(c=>{const n=c.name.toLowerCase();return n===w||n.includes(w)||w.includes(n)}).map(c=>c.name).slice(0,1);
+   const l=S.choreDone&&S.choreDone.date===t?S.choreDone.names:[];S.choreDone={date:t,names:[...new Set([...l,...names])]}};
   for(const d of j.done){
    if(!d||typeof d.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(d.date))continue;
    const kind=d.kind;
@@ -130,6 +137,7 @@ async function applyToday(){try{const r=await fetch('today.json',{cache:'no-stor
    else if(kind==='habit'&&d.name){let i=habitMatch(String(d.name));if(i<0){S.habits.push({name:String(d.name),mins:0,log:[]});i=S.habits.length-1}S.habits[i].log=[...new Set([...(S.habits[i].log||[]),d.date])]}
    else if(kind==='todo'&&d.text){const mark=list=>{const t=list.find(x=>x.text===d.text);if(t)t.done=true};mark(S.todos);mark(S.later);mark(S.work||[])}
    else if(kind==='work'&&d.text){const t=(S.work||[]).find(x=>x.text===d.text);if(t)t.done=true}
+   else if(kind==='chore'){choreTick(d)}
   }
  }
  S.todayApplied=txt;save(S)}catch(err){console.warn('today.json skipped',err)}}

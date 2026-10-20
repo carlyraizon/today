@@ -49,6 +49,8 @@ All keys are optional. `type` is one of read/watch/listen, and `freq` is one of 
 - **meal** (optional) shows in the Meal section as one or two lines of text, plus a link if there is one. If `meal` is missing from the latest today.json, the section says "No meal note today".
 - **cleaning** is a fixed calendar schedule, and it **replaces** the whole cleaning list. `freq` is `daily`, `weekly` (also needs `day`: Mon–Sun) or `monthly` (either `date`: 1–28, or an nth-weekday rule `week`: 1–4 plus `day`: Mon–Sun, e.g. `"week":1,"day":"Sat"` = first Saturday). The section shows two groups: **Every day** (the daily tasks) and **Today** (the weekly task for today's weekday, plus any monthly task matching today's date or nth weekday). If nothing is scheduled for today it says "Nothing extra today". Under that, a one-line "Next:" preview shows the next weekly or monthly task. Checkmarks reset every day.
 
+- **done** (optional) is a list of things reported as done elsewhere, merged into checkmarks and streaks. Each entry has a `date` (YYYY-MM-DD) and a `kind`: `workout`, `sketch`, `habit` (+`name`), `todo` or `work` (+`text`), or `chore` (+`name`). A `chore` entry ticks the matching cleaning task for today (names match loosely, e.g. `"10-min reset"`); `"name":"all"` ticks every task scheduled that day, and for a past date it counts that day toward the cleaning streak.
+
 ## Code layout
 - `js/store.js`: state, seed data, load/save
 - `js/schedule-source.js`: **schedule data source**. v1 is `LocalSource`. To add Google Calendar, write a `GoogleCalendarSource` with the same `getEvents()` and set `activeSource`.
