@@ -5,8 +5,8 @@
     "Book flights for an upcoming visit"
   ],
   "work": [
-    "Prep for Accuracy Studio meeting",
-    "Send Joe the design system components"
+    "Prep for a client meeting",
+    "Send design system components to a collaborator"
   ],
   "done": [
     {
@@ -177,11 +177,11 @@
     }
   ],
   "intention": {
-    "text": "Move slowly through ordinary things today, and notice what they hold.",
-    "journal": "What small, everyday thing quietly makes my life easier, and how can I thank it?",
-    "ritual": "Open a window for a few minutes while you dust, and let fresh air move through the room."
+    "text": "Clear one small space fully today, and let that be enough.",
+    "journal": "What am I holding onto that I could let go of, the way I'd clear out a fridge shelf?",
+    "ritual": "Light a candle on the kitchen counter while you wipe down the appliances, and blow it out when you're done."
   },
-  "sketch": {
-    "text": "Sketch one door handle or light switch you wiped during today's dusting and high-touch clean, right before evening knitting, in a Wendy MacNaughton spirit: one slow continuous line looking mostly at the object, then a small handwritten note about who or what touches it most (10 min)."
+  "meal": {
+    "text": "Greek yogurt bowl with berries and a scoop of protein for breakfast; chicken, rice and roasted veg with a lemon-tahini drizzle for dinner."
   }
 }
